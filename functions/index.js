@@ -68,11 +68,17 @@ app.get('/images/:category', async (req, res) =>{
     allImages.map(image => {
         if (image.category === category) {
             result.push(image)
-            res.status(200).send(result)
+            
         }
         
     })
+    res.status(200).send(result)
     
+})
+
+app.get('/images', async (req,res)=>{
+    const images = await pictures.find().toArray()
+    res.status(200).send(images)
 })
 
 export const api = functions.https.onRequest(app)
