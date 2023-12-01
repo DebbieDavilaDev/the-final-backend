@@ -16,15 +16,14 @@ const categories = db.collection("categories")
 const firebaseApp = initializeApp(service_account)
 
 client.connect()
-console.log("Connected to Mongo")
+console.log("Connected to Mango")
 
 app.post("/upload", async function(req, res){
-    const {url, fileName, description, category } = req.body
+    const {url, description, category } = req.body
     const img = {
         url: url,
-        name: fileName,
         description: description ? description: "no description",
-        category, 
+        category: category, 
     }
     pictures.insertOne(img)
     res.status(200).send()
@@ -79,6 +78,12 @@ app.get('/images/:category', async (req, res) =>{
 app.get('/images', async (req,res)=>{
     const images = await pictures.find().toArray()
     res.status(200).send(images)
+})
+
+app.get('/images',(req,res)=>{
+    // return all images
+    pictures.find().toArray()
+    .then(result => res.status(200).send(result))
 })
 
 export const api = functions.https.onRequest(app)
