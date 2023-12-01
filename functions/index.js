@@ -4,6 +4,7 @@ import { MongoClient, ObjectId } from "mongodb"
 import functions from "firebase-functions"
 import MONGO_URI from "./secrets.js"
 import { service_account } from "./service_account.js"
+import { initializeApp } from "firebase-admin/app"
 
 const app = express()
 app.use(cors())
@@ -15,15 +16,14 @@ const categories = db.collection("categories")
 const firebaseApp = initializeApp(service_account)
 
 client.connect()
-console.log("Connected to Mongo")
+console.log("Connected to Mango")
 
 app.post("/upload", async function(req, res){
-    const {url, fileName, description, category } = req.body
+    const {url, description, category } = req.body
     const img = {
         url: url,
-        name: fileName,
         description: description ? description: "no description",
-        category, 
+        category: category, 
     }
     pictures.insertOne(img)
     res.status(200).send()
@@ -38,9 +38,15 @@ async function getAllCategories () {
     return all
 }
 
+app.get('/categories',async(req,res)=>{
+    const categories = await getAllCategories()
+    res.status(200).send(categories)
+})
+
 app.post('/addCategory', async (req, res)=>{
     const arr = []
     const category = req.body.category
+    console.log('category',category)
     await categories.insertOne({category})
     const allCategories = await getAllCategories()
     res.status(200).send({message: 'category added', categories: allCategories})
@@ -66,6 +72,12 @@ app.get('/images/:category', async (req, res) =>{
         
     })
     
+})
+
+app.get('/images',(req,res)=>{
+    // return all images
+    pictures.find().toArray()
+    .then(result => res.status(200).send(result))
 })
 
 export const api = functions.https.onRequest(app)
