@@ -57,7 +57,7 @@ app.post('/addCategory', async (req, res)=>{
 })
 
 app.post('/deleteCategory', async (req,res)=>{
-    const category = req.body
+    const category = req.body.category
     await categories.deleteOne(category)
 
 const allCategories = await getAllCategories()
