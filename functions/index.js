@@ -29,6 +29,10 @@ app.post("/upload", async function(req, res){
     res.status(200).send()
 }) 
 
+app.get("/",(req,res)=>{
+     res.send("This is working!")
+})
+
 async function getAllCategories () {
     const allCategories = await categories.find().toArray()
     let all = []
@@ -80,10 +84,5 @@ app.get('/images', async (req,res)=>{
     res.status(200).send(images)
 })
 
-app.get('/images',(req,res)=>{
-    // return all images
-    pictures.find().toArray()
-    .then(result => res.status(200).send(result))
-})
 
 export const api = functions.https.onRequest(app)
