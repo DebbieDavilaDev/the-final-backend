@@ -19,7 +19,7 @@ const categories = db.collection("categories")
 const firebaseApp = initializeApp(service_account)
 
 client.connect()
-console.log("Connected to Mango")
+console.log("Connected to Mongo")
 
 app.post("/upload", async function(req, res){
     const {url, description, category } = req.body
